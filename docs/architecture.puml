@@ -1,0 +1,125 @@
+@startuml
+!define LIGHTBLUE #E3F2FD
+!define BLUE #2196F3
+!define LIGHTGREEN #E8F5E9
+!define GREEN #4CAF50
+!define LIGHTYELLOW #FFF9C4
+!define YELLOW #FFC107
+
+skinparam backgroundColor #FAFAFA
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+' Definición de capas
+package "Capa de Presentación" LIGHTBLUE {
+    component "Frontend\n(HTML/CSS/JS)" as Frontend #BLUE {
+        component "Vista Login" as LoginView
+        component "Vista Tablero\nKanban" as BoardView
+        component "Vista Tareas" as TaskView
+        component "Vista Reportes" as ReportView
+    }
+}
+
+package "Capa de Lógica de Negocio" LIGHTGREEN {
+    component "Gestor de\nAutenticación" as AuthManager #GREEN {
+        portin authIn
+        portout authOut
+    }
+    
+    component "Gestor de\nTablero Kanban" as BoardManager #GREEN {
+        portin boardIn
+        portout boardOut
+    }
+    
+    component "Gestor de\nTareas" as TaskManager #GREEN {
+        portin taskIn
+        portout taskOut
+    }
+    
+    component "Gestor de\nReportes" as ReportManager #GREEN {
+        portin reportIn
+        portout reportOut
+    }
+}
+
+package "Capa de Datos" LIGHTYELLOW {
+    component "Almacenamiento\n(LocalStorage)" as Storage #YELLOW {
+        database "users" as UsersDB
+        database "boards" as BoardsDB
+        database "tasks" as TasksDB
+        database "comments" as CommentsDB
+    }
+}
+
+' Relaciones Frontend -> Gestores
+Frontend --> authIn : "login()\nregister()\nlogout()"
+Frontend --> boardIn : "getBoards()\ncreateBoard()\nupdateBoard()"
+Frontend --> taskIn : "getTasks()\ncreateTasks()\nupdateTasks()\nassignTask()\naddComment()"
+Frontend --> reportIn : "getMetrics()\ngetBurndown()\ngetVelocity()"
+
+' Relaciones Gestores -> Storage
+authOut --> Storage : "save/load\nuser data"
+boardOut --> Storage : "save/load\nboard data"
+taskOut --> Storage : "save/load\ntask data"
+reportOut --> Storage : "read\nmetrics data"
+
+' Relaciones entre gestores
+BoardManager ..> TaskManager : "<<usa>>"
+ReportManager ..> TaskManager : "<<consulta>>"
+AuthManager ..> BoardManager : "<<autoriza>>"
+
+' Notas explicativas
+note right of Frontend
+  **Responsabilidades:**
+  - Renderizar interfaz de usuario
+  - Capturar eventos del usuario
+  - Mostrar datos al usuario
+  - Validación básica de formularios
+end note
+
+note right of AuthManager
+  **Responsabilidades:**
+  - Registro de usuarios
+  - Inicio de sesión
+  - Gestión de sesiones
+  - Validación de credenciales
+end note
+
+note right of BoardManager
+  **Responsabilidades:**
+  - Crear/editar tableros
+  - Gestionar columnas
+  - Organizar tareas por estado
+  - Control de acceso a tableros
+end note
+
+note right of TaskManager
+  **Responsabilidades:**
+  - CRUD de tareas
+  - Asignación de tareas
+  - Cambio de estados
+  - Gestión de comentarios
+  - Gestión de prioridades
+end note
+
+note right of Storage
+  **Responsabilidades:**
+  - Persistencia de datos
+  - Serialización JSON
+  - Gestión de claves
+  - Recuperación de datos
+end note
+
+' Leyenda
+legend bottom
+  |<LIGHTBLUE> Capa de Presentación |
+  |<LIGHTGREEN> Capa de Lógica de Negocio |
+  |<LIGHTYELLOW> Capa de Datos |
+  
+  **Tipos de relaciones:**
+  --> : Invocación directa
+  ..> : Dependencia / Uso
+end legend
+
+@enduml
