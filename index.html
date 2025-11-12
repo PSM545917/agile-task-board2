@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agile Task Board - Kanban</title>
+    <!-- Enlace a estilos CSS -->
+    <link rel="stylesheet" href="styles/board.css">
+</head>
+<body>
+    <!-- Header principal de la aplicación -->
+    <header class="header">
+        <h1>🚀 Agile Task Board</h1>
+        <p>Sistema de Gestión de Tareas para Equipos Ágiles</p>
+    </header>
+
+    <!-- Contenedor principal del tablero Kanban -->
+    <main class="kanban-board" id="kanbanBoard">
+        
+        <!-- Columna TO DO -->
+        <section class="kanban-column" data-status="todo">
+            <div class="column-header">
+                <div class="column-indicator"></div>
+                <h2>📋 To Do</h2>
+                <span class="task-count" data-count="todo">0</span>
+            </div>
+            <!-- Contenedor donde se renderizarán las tareas -->
+            <div class="tasks-container" data-status="todo"></div>
+        </section>
+
+        <!-- Columna IN PROGRESS -->
+        <section class="kanban-column" data-status="progress">
+            <div class="column-header">
+                <div class="column-indicator"></div>
+                <h2>⚡ In Progress</h2>
+                <span class="task-count" data-count="progress">0</span>
+            </div>
+            <!-- Contenedor donde se renderizarán las tareas -->
+            <div class="tasks-container" data-status="progress"></div>
+        </section>
+
+        <!-- Columna DONE -->
+        <section class="kanban-column" data-status="done">
+            <div class="column-header">
+                <div class="column-indicator"></div>
+                <h2>✅ Done</h2>
+                <span class="task-count" data-count="done">0</span>
+            </div>
+            <!-- Contenedor donde se renderizarán las tareas -->
+            <div class="tasks-container" data-status="done"></div>
+        </section>
+        
+    </main>
+
+    <!-- Script JavaScript para funcionalidad -->
+    <script src="src/components/board.js"></script>
+</body>
+</html>
